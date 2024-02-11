@@ -1,96 +1,133 @@
-import React, { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
-import { Footer, Navbar } from "../components";
+import { Navbar } from "../components";
+import { images } from "../assets/images";
+import { Link, useParams } from "react-router-dom";
 
-const Product = () => {
+const Products = () => {
+  const productData = useMemo(() => [
+  
+    {
+      id: 1,
+      title: "Product 1",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 10.99,
+      images: images.Product1,
+    },
+    {
+      id: 2,
+      title: "Product 2",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 12.99,
+      images: images.Product2,
+    },
+    {
+      id: 3,
+      title: "Product 3",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 13.99,
+      images: images.Product3,
+    },
+    {
+      id: 4,
+      title: "Product 4",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 16.99,
+      images: images.Product4,
+    },
+    {
+      id: 5,
+      title: "Product 5",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 18.99,
+      images: images.Product5,
+    },
+    {
+      id: 6,
+      title: "Product 6",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 29.99,
+      images: images.Product6,
+    },
+    {
+      id: 7,
+      title: "Product 7",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 20.99,
+      images: images.Product7,
+    },
+    {
+      id: 8,
+      title: "Product 8",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum facere doloremque veritatis odit similique sequi. Odit amet fuga nam quam quasi facilis sed doloremque saepe sint perspiciatis explicabo totam vero quas provident ipsam, veritatis nostrum velit",
+      price: 12.99,
+      images: images.Product8,
+    },
+ 
+], []);
+
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
 
   const addProduct = (product) => {
     dispatch(addCart(product));
   };
-  console.log(id, "aadadId");
 
   useEffect(() => {
-    const getProduct = async () => {
-      setLoading(true);
+    const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `https://api.escuelajs.co/api/v1/products/${id}`
+        const selectedProduct = productData.find(
+          (product) => product.id === Number(id)
         );
-        const data = await response.json();
-        setProduct(data);
-        setLoading(false);
-        console.log("Product Response ===>>", data);
+        if (selectedProduct) {
+          setProduct(selectedProduct);
+        } else {
+          throw new Error("Product not found");
+        }
       } catch (error) {
-        console.error("Error fetching product:", error);
-        setLoading(false);
+        console.log(error);
       }
     };
-    getProduct();
-  }, [id]);
-  console.log("Produncr==========>>>>", product);
+
+    fetchProduct();
+  }, [id, productData]);
+
   const Loading = () => {
     return (
-      <>
-        <div className="container my-5 py-2">
-          <div className="row">
-            <div className="col-md-6 py-3">
-              <Skeleton height={400} width={400} />
-            </div>
-            <div className="col-md-6 py-5">
-              <Skeleton height={30} width={250} />
-              <Skeleton height={90} />
-              <Skeleton height={40} width={70} />
-              <Skeleton height={50} width={110} />
-              <Skeleton height={120} />
-              <Skeleton height={40} width={110} inline={true} />
-              <Skeleton className="mx-3" height={40} width={110} />
-            </div>
+      <div className="container my-5 py-3 bg-dark rounded shadow">
+        <div className="row justify-content-center">
+          <div className="col-12 text-center">
+            <h2 className="display-4 text-light">Loading...</h2>
           </div>
         </div>
-      </>
+      </div>
     );
   };
 
   const ShowProduct = () => {
-    if (!product) return null; 
     return (
-      <div className="container my-5 py-2 bg-dark text-light">
-        <div className="row">
-          <div className="col-md-6 col-sm-12 py-3">
-            {/* Render product details here */}
+      <div className="container my-5 py-3 bg-dark rounded shadow">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
             <img
-              className="img-fluid"
-              src={product.images[0]} 
+              src={product.images}
               alt={product.title}
-              width="400px"
-              height="400px"
+              className="img-fluid"
             />
           </div>
-          <div className="col-md-6 col-md-6 py-5">
-            <h4 className="text-uppercase text-muted">{product.title}</h4>
-            <h1 className="display-5">{product.title}</h1>
-            <p className="lead">
-              <i className="fa fa-star" />
-              <i className="fa fa-star" />
-              <i className="fa fa-star" />
-            </p>
-            <h3 className="display-6  my-4">${product.price}</h3>
-            <p className="lead">{product.description}</p>
+          <div className="col-md-6">
+            <h2 className="text-light">{product.title}</h2>
+            <p className="text-light">{product.description}</p>
+            <p className="text-light lead">$ {product.price}</p>
             <button
-              className="btn btn-outline-light"
+              className="btn btn-light m-1"
               onClick={() => addProduct(product)}
             >
               Add to Cart
             </button>
-            <Link to="/cart" className="btn btn-light mx-3">
+            <Link to="/cart" className="btn btn-light m-1">
               Go to Cart
             </Link>
           </div>
@@ -102,11 +139,9 @@ const Product = () => {
   return (
     <>
       <Navbar />
-      <div className="container">
-        <div className="row">{loading ? <Loading /> : <ShowProduct />}</div>
-      </div>
+      {product ? <ShowProduct /> : <Loading />}
     </>
   );
 };
 
-export default Product;
+export default Products;
