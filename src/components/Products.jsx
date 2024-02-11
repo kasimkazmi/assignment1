@@ -14,7 +14,10 @@ const Products = () => {
 
   const addProduct = (product) => {
     dispatch(addCart(product));
-    setSelectedItem(product); // Set selected item
+    setSelectedItem(product);
+    setTimeout(() => {
+      setSelectedItem(null);
+    }, 800);
   };
 
   useEffect(() => {
@@ -31,111 +34,96 @@ const Products = () => {
   const Loading = () => {
     return (
       <>
-        <div className="col-12 py-5 text-center">
-          <Skeleton height={40} width={560} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
+        {[...Array(4)].map((_, index) => (
+          <div className="col-md-3 col-sm-6 col-xs-12 mb-4" key={index}>
+            <Skeleton height={592} />
+          </div>
+        ))}
       </>
+    );
+  };
+
+  const ProductCard = ({ product }) => {
+    return (
+      <div className="col-md-3 col-sm-6 col-xs-12 mb-4">
+        <div className="card text-center h-100" key={product.id}>
+          <img
+            className="card-img-top p-3"
+            src={product.images}
+            alt="Card"
+            height={300}
+          />
+          <div className="card-body">
+            <h5 className="card-title">{product.title}</h5>
+            <p className="card-text">
+              {product.description.substring(0, 90)}...
+            </p>
+          </div>
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item lead">$ {product.price}</li>
+          </ul>
+          <div className="card-body">
+            <Link to={"/product/" + product.id} className="btn btn-dark m-1">
+              Product View
+            </Link>
+            <button
+              className="btn btn-dark m-1"
+              onClick={() => addProduct(product)}
+            >
+              Add to Cart
+            </button>
+            {selectedItem && selectedItem.id === product.id && (
+              <div
+                className="alert alert-success alert-dismissible fade show"
+                role="alert"
+              >
+                Added to Cart!
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                  onClick={() => setSelectedItem(null)}
+                ></button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     );
   };
 
   const ShowProducts = () => {
-    return (
-      <>
-        {data.map((product) => {
-          return (
-            <div
-              id={product.id}
-              key={product.id}
-              className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4"
-            >
-              <div className="card text-center h-100" key={product.id}>
-                <img
-                  className="card-img-top p-3"
-                  src={product.images}
-                  alt="Card"
-                  height={300}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    {product.title.substring(0, 12)}...
-                  </h5>
-                  <p className="card-text">
-                    {product.description.substring(0, 90)}...
-                  </p>
-                </div>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item lead">$ {product.price}</li>
-                </ul>
-                <div className="card-body">
-                  <Link
-                    to={"/product/" + product.id}
-                    className="btn btn-dark m-1"
-                  >
-                    Product View
-                  </Link>
-                  <button
-                    className="btn btn-dark m-1"
-                    onClick={() => addProduct(product)}
-                  >
-                    Add to Cart
-                  </button>
-                  {selectedItem && selectedItem.id === product.id && (
-                    <div
-                      className="alert alert-success alert-dismissible fade show"
-                      role="alert"
-                    >
-                      Added to Cart!
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                        onClick={() => setSelectedItem(null)}
-                      ></button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </>
-    );
+    const productRows = [];
+
+    for (let i = 0; i < data.length; i += 4) {
+      const productsInRow = data.slice(i, i + 4).map((product, index) => (
+        <div className="col-md-3 col-sm-6 col-xs-12 mb-4" key={i + index}>
+          <ProductCard product={product} key={i + index} />
+        </div>
+      ));
+      productRows.push(
+        <div className="row" key={i}>
+          {productsInRow}
+        </div>
+      );
+    }
+
+    return productRows;
   };
 
   return (
-    <>
-      <div className="container my-5 py-5 bg-light rounded shadow">
-  <div className="row">
-    <div className="col-12">
-      <h2 className="display-4 text-center mb-4">Latest Products</h2>
-      <hr className="mb-5" />
+    <div className="container my-5 py-5 bg-dark rounded shadow">
+      <div className="row">
+        <div className="col-12">
+          <h2 className="display-4 text-center text-light mb-4">
+            Latest Products
+          </h2>
+          <hr className="mb-5" style={{ borderColor: "#ffffff" }} />
+        </div>
+      </div>
+      <div className="row">{loading ? <Loading /> : <ShowProducts />}</div>
     </div>
-  </div>
-  <div className="row row-cols-1 row-cols-md-3 g-4">
-    {loading ? <Loading /> : <ShowProducts />}
-  </div>
-</div>
-
-    </>
   );
 };
 

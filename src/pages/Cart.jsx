@@ -65,7 +65,6 @@ const Cart = () => {
                               >
                                 <img
                                   src={item.images}
-                                  // className="w-100"
                                   alt={item.title}
                                   width={100}
                                   height={75}
@@ -77,7 +76,6 @@ const Cart = () => {
                               <p>
                                 <strong>{item.title}</strong>
                               </p>
-                              <p>Color: blue</p>
                               <p>Size: M</p>
                             </div>
 
@@ -171,7 +169,7 @@ const Cart = () => {
         <hr />
         {state.length > 0 ? <ShowCart /> : <EmptyCart />}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

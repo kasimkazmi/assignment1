@@ -3,22 +3,15 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="mb-0 text-center sticky-bottom bg-dark">
+      <footer
+        className="mb-0 text-center sticky-bottom bg-dark"
+        style={{ paddingTop: "20px", height: "80px" }}
+      >
         <div className="d-flex align-items-center justify-content-center pb-5">
           <div className="col-md-6">
-            <p className="mb-3 mb-md-0 text-light">
-              Made with by{" "}
-              <a
-              href="https://github.com/kasimkazmi/assignment1"
-              className="text-decoration-underline text-dark fs-5 text-light"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Raja Kazmi
-              </a>
-            </p>
+            <p className="mb-3 mb-md-0 text-light">Made with by Raja Kazmi</p>
             <a
-              className="text-dark fs-4"
+              className="text-light fs-4"
               href="https://github.com/kasimkazmi/assignment1"
               target="_blank"
               rel="noreferrer"

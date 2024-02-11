@@ -60,16 +60,15 @@ const Product = () => {
   };
 
   const ShowProduct = () => {
-    if (!product) return null; // Return null if product is null
-    console.log(product, "bajbajdbdaj++++++++++++++++Producbnr");
+    if (!product) return null; 
     return (
-      <div className="container my-5 py-2">
+      <div className="container my-5 py-2 bg-dark text-light">
         <div className="row">
           <div className="col-md-6 col-sm-12 py-3">
             {/* Render product details here */}
             <img
               className="img-fluid"
-              src={product.images[0]} // Assuming the first image is the main image
+              src={product.images[0]} 
               alt={product.title}
               width="400px"
               height="400px"
@@ -79,18 +78,19 @@ const Product = () => {
             <h4 className="text-uppercase text-muted">{product.title}</h4>
             <h1 className="display-5">{product.title}</h1>
             <p className="lead">
-              {product.rating && product.rating.rate}{" "}
-              <i className="fa fa-star"></i>
+              <i className="fa fa-star" />
+              <i className="fa fa-star" />
+              <i className="fa fa-star" />
             </p>
             <h3 className="display-6  my-4">${product.price}</h3>
             <p className="lead">{product.description}</p>
             <button
-              className="btn btn-outline-dark"
+              className="btn btn-outline-light"
               onClick={() => addProduct(product)}
             >
               Add to Cart
             </button>
-            <Link to="/cart" className="btn btn-dark mx-3">
+            <Link to="/cart" className="btn btn-light mx-3">
               Go to Cart
             </Link>
           </div>
@@ -99,14 +99,13 @@ const Product = () => {
     );
   };
 
-
   return (
     <>
       <Navbar />
       <div className="container">
         <div className="row">{loading ? <Loading /> : <ShowProduct />}</div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
