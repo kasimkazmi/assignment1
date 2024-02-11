@@ -96,18 +96,16 @@ const Products = () => {
             <li className="list-group-item lead">$ {product.price}</li>
           </ul>
           <div className="card-body">
-            {/* onClick{()=> navigateToAnotherPage()} */}
 
             <Link
               to={{
-                pathname: `/product/${product.id}`, // Include the product ID in the URL
+                pathname: `/product/${product.id}`, 
                 state: { productData: product },
               }}
               className="btn btn-dark m-1"
             >
               Product View
             </Link>
-            {/* state: { productData }, */}
 
             <button
               className="btn btn-dark m-1"
