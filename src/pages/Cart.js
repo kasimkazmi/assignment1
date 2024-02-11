@@ -169,7 +169,6 @@ const Cart = () => {
         <hr />
         {state.length > 0 ? <ShowCart /> : <EmptyCart />}
       </div>
-      {/* <Footer /> */}
     </>
   );
 };
