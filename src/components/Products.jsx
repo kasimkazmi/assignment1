@@ -1,36 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
-
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
 import { Link } from "react-router-dom";
 
 const Products = () => {
   const [data, setData] = useState([]);
-  const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
-  let componentMounted = true;
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const dispatch = useDispatch();
 
   const addProduct = (product) => {
     dispatch(addCart(product));
+    setSelectedItem(product); // Set selected item
   };
 
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
       const response = await fetch("https://api.escuelajs.co/api/v1/products");
-      if (componentMounted) {
-        setData(await response.clone().json());
-        // setFilter(await response.json());
-        setLoading(false);
-      }
-      return () => {
-        componentMounted = false;
-      };
+      setData(await response.json());
+      setLoading(false);
     };
 
     getProducts();
@@ -64,12 +56,6 @@ const Products = () => {
     );
   };
 
-  // const filterProduct = (cat) => {
-  //   const updatedList = data.filter((item) => item.category === cat);
-  //   setFilter(updatedList);
-
-  // };
-
   const ShowProducts = () => {
     return (
       <>
@@ -97,13 +83,13 @@ const Products = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item lead">$ {product.price}</li>
-                             </ul>
+                </ul>
                 <div className="card-body">
                   <Link
                     to={"/product/" + product.id}
                     className="btn btn-dark m-1"
                   >
-                   Product View
+                    Product View
                   </Link>
                   <button
                     className="btn btn-dark m-1"
@@ -111,6 +97,21 @@ const Products = () => {
                   >
                     Add to Cart
                   </button>
+                  {selectedItem && selectedItem.id === product.id && (
+                    <div
+                      className="alert alert-success alert-dismissible fade show"
+                      role="alert"
+                    >
+                      Added to Cart!
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                        onClick={() => setSelectedItem(null)}
+                      ></button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -119,19 +120,21 @@ const Products = () => {
       </>
     );
   };
+
   return (
     <>
-      <div className="container my-3 py-3">
-        <div className="row">
-          <div className="col-12">
-            <h2 className="display-5 text-center">Latest Products</h2>
-            <hr />
-          </div>
-        </div>
-        <div className="row justify-content-center">
-          {loading ? <Loading /> : <ShowProducts />}
-        </div>
-      </div>
+      <div className="container my-5 py-5 bg-light rounded shadow">
+  <div className="row">
+    <div className="col-12">
+      <h2 className="display-4 text-center mb-4">Latest Products</h2>
+      <hr className="mb-5" />
+    </div>
+  </div>
+  <div className="row row-cols-1 row-cols-md-3 g-4">
+    {loading ? <Loading /> : <ShowProducts />}
+  </div>
+</div>
+
     </>
   );
 };
